@@ -35,12 +35,28 @@ I then explored different color spaces and different `skimage.hog()` parameters 
 
 Here is an example using the `YCrCb` color space and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
 
-
 ![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/hog_example.jpg?raw=true)
 
-#### 2. Explain how you settled on your final choice of HOG parameters.
+#### 2. How to determine my final choice of HOG parameters.
 
-I tried various combinations of parameters and...
+I tried various combinations of parameters in code cell 8 and 9 through visualize the results of HOG features as well as the performance of trained classifier. Here are some example output of different parameters settings.
+
+![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/tuning_windows_setting1.jpg?raw=true)
+
+![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/tuning_windows_setting0.jpg?raw=true)
+
+For the color space, 'YCrCb' give the best result in my case. Meanwhile, time for extracting features is also another important factor to consider. Eventually, I select following values:
+
+cspace = 'YCrCb' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
+orient = 9
+pix_per_cell = 8
+cell_per_block = 2
+hog_channel = "ALL" # Can be 0, 1, 2, or "ALL"
+spatial_size = (32, 32)
+hist_bins = 32
+spatial_feature = True
+hist_feature = True
+hog_feature = True
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
