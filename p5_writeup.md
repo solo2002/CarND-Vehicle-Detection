@@ -71,7 +71,7 @@ hog_feature = True
 
 In Cell 9, I trained a linear SVM using the normalized HOG features. The features are first normalized as follows:
 
-`X = np.vstack((car_features, noncar_features)).astype(np.float64)  
+X = np.vstack((car_features, noncar_features)).astype(np.float64)  
 
 X_scaler = StandardScaler().fit(X) # Fit a per-column scaler
 
@@ -81,17 +81,17 @@ y = np.hstack((np.ones(len(car_features)), np.zeros(len(noncar_features))))#3*le
 
 Then, the overall dataset is split as training and test data:
 
-rand_state = np.random.randint(0, 100)
-X_train, X_test, y_train, y_test = train_test_split(
+`rand_state = np.random.randint(0, 100)`
+`X_train, X_test, y_train, y_test = train_test_split(
     scaled_X, y, test_size=0.1, random_state=rand_state)`
 
 Here, the split ratio is 9 : 1 in stead of 8 : 2, since the number of data is limited.
 
 A linear svm model is used to fit the training data.
 
-svc = LinearSVC()
+`svc = LinearSVC()`
 
-svc.fit(X_train, y_train)
+`svc.fit(X_train, y_train)`
 
 Here is the output of test images:
 
@@ -137,25 +137,15 @@ Here's a [link to my video result](https://youtu.be/xeqrv99d2Ac)
 
 The code is located under title 'Pipeline', and it is quite similar to what I describe in 'Sliding Window Search'. The major difference is that 10 frames of video are saved by using a class named 'Detection'. Instead of peforming the heatmap and labeling steps for current frame, the detection result of last 10 frames are combined and added to the heatmap, where the threshold is set as `1 + len(cur_windows)//2`. 
 
-Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
-
-### Here are six frames and their corresponding heatmaps:
-
-![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
-
-
-
 ---
 
 ### Discussion
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+First of all, I would like to discuss about false positive. My pipeline labels 2 areas of trees on the reverse side as cars. I was trying to reduce that via tuning parameter setting. The problem is that if more restrict setting is used, then less positive on the reverse side are recognized. Although those cars on the reverse side of highway may not as essential as those cars on the same siade in this video, it could be also important under some conditions, such as no physical separation/curb between a two way road.
+
+Secondly, given that searching window sizes, positions, and scales are hard-coded, the pipeline could fail when testing case that shows dramatically variations. To make it more robust, we probably need more data to train a more general classifier.
+
+Last but not least,     
 
