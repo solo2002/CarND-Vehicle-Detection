@@ -73,17 +73,11 @@ In Cell 9, I trained a linear SVM using the normalized HOG features. The feature
 
 X = np.vstack((car_features, noncar_features)).astype(np.float64)  
 
-# Fit a per-column scaler
+X_scaler = StandardScaler().fit(X) # Fit a per-column scaler
 
-X_scaler = StandardScaler().fit(X)
+scaled_X = X_scaler.transform(X) # Apply the scaler to X
 
-# Apply the scaler to X
-
-scaled_X = X_scaler.transform(X)
-
-# Define the labels vector
-
-y = np.hstack((np.ones(len(car_features)), np.zeros(len(noncar_features))))#3*len(noncar_features)
+y = np.hstack((np.ones(len(car_features)), np.zeros(len(noncar_features))))#3*len(noncar_features) # Define the labels vector
 
 Then, the overall dataset is split as training and test data:
 
@@ -93,16 +87,41 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 Here, the split ratio is 9 : 1 in stead of 8 : 2, since the number of data is limited.
 
+A linear svm model is used to fit the training data.
+
+svc = LinearSVC()
+
+svc.fit(X_train, y_train)
+
 Here is the output of test images:
+
 ![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/find_car_example.jpg?raw=true)
 
 ### Sliding Window Search
 
 #### 1. How to implement a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+In code cell 10 to 13, I eaxmined diffent window positions at different scales. The methond 'find_cars' from the lesson materials is adopted and modified. The HOG features, spatial_features, and hist_features are extracted from selected regions of image. A couple of window sizes and positions, as well as overlaps are investigated. Here is an example of the results. 
 
-![alt text][image3]
+![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/test_window.jpg?raw=true)
+
+The heatmap of the above image:
+
+![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/heatmap0.jpg?raw=true)
+
+After applying a threshold value (1) to the heatmap, it shows as flow:
+
+![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/threshold_heatmap.jpg?raw=true)
+
+
+Eventually, I draw a box, which is determined by the heatmap, to the test image:
+
+![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/draw_heatmap_car.jpg?raw=true)
+
+Here is the result for all tested images:
+
+![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/vehicle_detection.jpg?raw=true)
+
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
