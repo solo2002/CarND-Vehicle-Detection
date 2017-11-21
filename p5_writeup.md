@@ -10,7 +10,7 @@ The goals / steps of this project are the following:
 * Estimate a bounding box for vehicles detected.
 
 [//]: # (Image References)
-[image1]: ./examples/car_not_car.png
+[image1]: https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/dataset_visual.jpg?raw=true
 [image2]: ./examples/HOG_example.jpg
 [image3]: ./examples/sliding_windows.jpg
 [image4]: ./examples/sliding_window.jpg
@@ -29,13 +29,15 @@ The goals / steps of this project are the following:
 
 You're reading it!
 
+All the code for this project is in the file of vehicle_detection.ipynb.
+
 ### Histogram of Oriented Gradients (HOG)
 
-#### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
+#### 1. How to extract HOG features from the training images.
 
-The code for this step is contained in the first code cell of the IPython notebook (or in lines # through # of the file called `some_file.py`).  
+The code for this step is contained in the code cell 6 of the IPython notebook.  
 
-I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
+I started by reading in all the `vehicle` and `non-vehicle` images.  Here is some example of the `vehicle` and `non-vehicle` classes:
 
 ![alt text][image1]
 
