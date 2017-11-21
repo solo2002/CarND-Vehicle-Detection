@@ -48,23 +48,57 @@ I tried various combinations of parameters in code cell 8 and 9 through visualiz
 For the color space, 'YCrCb' give the best result in my case. Meanwhile, time for extracting features is also another important factor to consider. Eventually, I select following values:
 
 cspace = 'YCrCb' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
+
 orient = 9
+
 pix_per_cell = 8
+
 cell_per_block = 2
+
 hog_channel = "ALL" # Can be 0, 1, 2, or "ALL"
+
 spatial_size = (32, 32)
+
 hist_bins = 32
+
 spatial_feature = True
+
 hist_feature = True
+
 hog_feature = True
 
-#### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
+#### 3. How to train the classifier 
 
-I trained a linear SVM using...
+In Cell 9, I trained a linear SVM using the normalized HOG features. The features are first normalized as follows:
+
+X = np.vstack((car_features, noncar_features)).astype(np.float64)  
+
+# Fit a per-column scaler
+
+X_scaler = StandardScaler().fit(X)
+
+# Apply the scaler to X
+
+scaled_X = X_scaler.transform(X)
+
+# Define the labels vector
+
+y = np.hstack((np.ones(len(car_features)), np.zeros(len(noncar_features))))#3*len(noncar_features)
+
+Then, the overall dataset is split as training and test data:
+
+rand_state = np.random.randint(0, 100)
+X_train, X_test, y_train, y_test = train_test_split(
+    scaled_X, y, test_size=0.1, random_state=rand_state)
+
+Here, the split ratio is 9 : 1 in stead of 8 : 2, since the number of data is limited.
+
+Here is the output of test images:
+![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/find_car_example.jpg?raw=true)
 
 ### Sliding Window Search
 
-#### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
+#### 1. How to implement a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
 I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
 
