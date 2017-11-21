@@ -147,5 +147,5 @@ First of all, I would like to discuss about false positive. My pipeline labels 2
 
 Secondly, given that searching window sizes, positions, and scales are hard-coded, the pipeline could fail when testing case that shows dramatically variations. To make it more robust, we probably need more data to train a more general classifier.
 
-Last but not least,     
+Last but not least, the efficiency of pipeline could be further improved. For instance, the position of car could be predicted based on its speed and its position on last frame, features could be extracted once and implmented to different sliding window, etc.     
 
