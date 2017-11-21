@@ -71,7 +71,7 @@ hog_feature = True
 
 In Cell 9, I trained a linear SVM using the normalized HOG features. The features are first normalized as follows:
 
-X = np.vstack((car_features, noncar_features)).astype(np.float64)  
+`X = np.vstack((car_features, noncar_features)).astype(np.float64)  
 
 X_scaler = StandardScaler().fit(X) # Fit a per-column scaler
 
@@ -83,7 +83,7 @@ Then, the overall dataset is split as training and test data:
 
 rand_state = np.random.randint(0, 100)
 X_train, X_test, y_train, y_test = train_test_split(
-    scaled_X, y, test_size=0.1, random_state=rand_state)
+    scaled_X, y, test_size=0.1, random_state=rand_state)`
 
 Here, the split ratio is 9 : 1 in stead of 8 : 2, since the number of data is limited.
 
@@ -118,27 +118,24 @@ Eventually, I draw a box, which is determined by the heatmap, to the test image:
 
 ![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/draw_heatmap_car.jpg?raw=true)
 
-Here is the result for all tested images:
-
-![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/vehicle_detection.jpg?raw=true)
-
-
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
 Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
 
-![alt text][image4]
+![alt text](https://github.com/solo2002/CarND-Vehicle-Detection/blob/master/output_images/vehicle_detection.jpg?raw=true)
+
 ---
 
 ### Video Implementation
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video.mp4)
+
+Here's a [link to my video result](https://youtu.be/xeqrv99d2Ac)
 
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
+The code is located under title 'Pipeline', and it is quite similar to what I describe in 'Sliding Window Search'. The major difference is that 10 frames of video are saved by using a class named 'Detection'. Instead of peforming the heatmap and labeling steps for current frame, the detection result of last 10 frames are combined and added to the heatmap, where the threshold is set as `1 + len(cur_windows)//2`. 
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
 
